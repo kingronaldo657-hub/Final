@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For My Penguin ❤️</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: Poppins, sans-serif;
+  background: linear-gradient(135deg,#ff9a9e,#fad0c4);
+  color: white;
+  text-align: center;
+  overflow: hidden;
+}
+
+#app { padding: 40px 20px; position: relative; z-index: 2; }
+
+button {
+  padding: 12px 26px;
+  font-size: 18px;
+  border-radius: 30px;
+  border: none;
+  margin: 10px;
+  cursor: pointer;
+}
+
+.yes { background:#ff4d6d; color:white; }
+.no { background:#222; color:white; position:absolute; }
+
+.message { margin-top: 12px; }
+
+/* Floating hearts */
+.heart {
+  position: fixed;
+  bottom: -20px;
+  font-size: 20px;
+  animation: floatUp linear forwards;
+  pointer-events:none;
+}
+
+@keyframes floatUp {
+  to { transform: translateY(-110vh); opacity:0; }
+}
+
+/* Heart explosion */
+.burst {
+  position: fixed;
+  font-size: 24px;
+  animation: burst 1.2s ease forwards;
+  pointer-events:none;
+}
+
+@keyframes burst {
+  from { transform: scale(0); opacity:1; }
+  to { transform: scale(2); opacity:0; }
+}
+
+/* Rose petals */
+.petal {
+  position: fixed;
+  top:-30px;
+  font-size:22px;
+  animation: fall linear forwards;
+  pointer-events:none;
+}
+
+@keyframes fall {
+  to { transform: translateY(110vh) rotate(360deg); opacity:0; }
+}
+
+/* Image animation */
+.slide-in {
+  opacity:0;
+  transform: translateY(40px) scale(.95);
+  animation: slideUp 1.6s ease forwards;
+  margin-top:25px;
+}
+
+@keyframes slideUp {
+  to { opacity:1; transform:translateY(0) scale(1); }
+}
+
+.proposal-img img {
+  width:280px;
+  max-width:90%;
+  border-radius:20px;
+  box-shadow:0 15px 35px rgba(0,0,0,.4);
+}
+</style>
+</head>
+
+<body>
+
+<div id="app"></div>
+
+<!-- 🎵 AUDIO -->
+<audio id="yesTune" preload="auto">
+  <source src="valentine.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+const app = document.getElementById("app");
+const tune = document.getElementById("yesTune");
+let noCount = 0;
+
+/* Unlock audio on first interaction (CRITICAL for mobile) */
+document.body.addEventListener("click", () => {
+  tune.play().then(()=>tune.pause()).catch(()=>{});
+}, { once:true });
+
+start();
+
+function start() {
+  app.innerHTML = `
+    <h1>I have something to ask you</h1>
+    <button class="yes" onclick="stepLove()">Yes, tell me</button>
+  `;
+}
+
+function stepLove() {
+  app.innerHTML = `
+    <h1>Amol loves you so much 😘😘😘</h1>
+    <p>You already knew that.</p>
+    <button class="yes" onclick="whyLove()">Move ahead</button>
+  `;
+}
+
+function whyLove() {
+  app.innerHTML = `
+    <h2>Why do you think Amol loves you?</h2>
+    <button class="yes" onclick="combo()">Hawt</button>
+    <button class="yes" onclick="combo()">Funny</button>
+    <button class="yes" onclick="combo()">Smart</button>
+    <button class="yes" onclick="combo()">Amazing</button>
+  `;
+}
+
+function combo() {
+  app.innerHTML = `
+    <h1>You’re a combination of everything and more</h1>
+    <h2>My beautiful human ❤️</h2>
+    <button class="yes" onclick="lastQuestion()">Continue</button>
+  `;
+}
+
+function lastQuestion() {
+  app.innerHTML = `
+    <h2>I have one last question to ask</h2>
+    <button class="yes" onclick="valentine()">Yes, what is it?</button>
+  `;
+}
+
+function valentine() {
+  noCount = 0;
+  app.innerHTML = `
+    <h1>Will you be my Valentine, Penguin?</h1>
+    <button class="yes" onclick="finalYes()">Yes</button>
+    <button class="no" onclick="noClicked(this)">No</button>
+    <p class="message" id="msg"></p>
+  `;
+}
+
+function noClicked(btn) {
+  noCount++;
+  document.getElementById("msg").innerText =
+    "You know what's the correct answer. Try again";
+
+  btn.style.left = Math.random()*70 + "vw";
+  btn.style.top = Math.random()*70 + "vh";
+}
+
+function finalYes() {
+  app.innerHTML = `
+    <h1>That’s right, you’re stuck with me</h1>
+    <h2>My forever Valentine ❤️</h2>
+
+    <div class="slide-in proposal-img">
+      <img src="proposal.jpg" alt="Proposal moment">
+    </div>
+  `;
+
+  heartExplosion();
+
+  tune.currentTime = 0;
+  tune.volume = 0.9;
+  tune.play().catch(()=>{});
+}
+
+/* Floating hearts */
+setInterval(()=>{
+  const h=document.createElement("div");
+  h.className="heart";
+  h.innerText="❤️";
+  h.style.left=Math.random()*100+"vw";
+  h.style.animationDuration=(5+Math.random()*5)+"s";
+  document.body.appendChild(h);
+  setTimeout(()=>h.remove(),10000);
+},400);
+
+/* Rose petals */
+setInterval(()=>{
+  const p=document.createElement("div");
+  p.className="petal";
+  p.innerText="🌹";
+  p.style.left=Math.random()*100+"vw";
+  p.style.animationDuration=(6+Math.random()*4)+"s";
+  document.body.appendChild(p);
+  setTimeout(()=>p.remove(),10000);
+},700);
+
+function heartExplosion(){
+  for(let i=0;i<20;i++){
+    const b=document.createElement("div");
+    b.className="burst";
+    b.innerText="❤️";
+    b.style.left=50+(Math.random()*20-10)+"vw";
+    b.style.top=40+(Math.random()*20-10)+"vh";
+    document.body.appendChild(b);
+    setTimeout(()=>b.remove(),1200);
+  }
+}
+</script>
+
+</body>
+</html>
